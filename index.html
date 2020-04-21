@@ -10,16 +10,43 @@
     </head>
     <body>  
     <main class="mdc-top-app-bar--fixed-adjust">
-        <div class="mdc-card">
-          <div class="mdc-card__primary-action" tabindex="0">
-            <!-- content within actionable area -->
-          </div>
-          <!-- ... content ... -->
-        </div>
     </main>
 
 
     <script>
+        let apiEndpoint = "https://randomuser.me/api/";
+        let covidData = null;
+        console.log(apiEndpoint);
+        fetch(apiEndpoint + "?results=5")
+        .then ( response => {return response.json()} )
+        .then ( (json) => {
+            for(let data of json.results)
+            {
+                let picture = document.createElement('div');
+                picture.classlist = "mdc-card__media mdc-card__media--16-9";
+                picture.style = "background-image: url('" + data.picture.medium + "');";
+                let card = document.createElement('div');
+                card.classList = "mdc-card";
+                let innerCard = document.createElement('div');
+                innerCard.classList = "mdc-card__primary-action mdc-ripple-upgraded";
+                let name = document.createElement('h2');
+                name.textContent = data.name.first + " " + data.name.last;
+                name.classList = "mdc-typography mdc-typography--headline6";
+                let email = document.createElement('h3');
+                email.classList = "mdc-typography mdc-typography--subtitle2";
+                email.textContent = data.email;
+                let address = document.createElement('div');
+                address.classList = "mdc-typography mdc-typography--body2";
+                address.textContent = data.location.street.number + " "  + data.location.street.name + "\n" 
+                    + data.location.city + ", " + data.location.state + " " + data.location.country;
+                innerCard.appendChild(picture);
+                innerCard.appendChild(name);
+                innerCard.appendChild(email);
+                innerCard.appendChild(address);
+                card.appendChild(innerCard);
+                document.querySelector(".mdc-top-app-bar--fixed-adjust").appendChild(card);
+            }
+        })
     </script>
     </body>
 </html>
